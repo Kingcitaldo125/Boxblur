@@ -1,13 +1,25 @@
 import time
 import pygame
 import random
-
-winX = 450
-winY = 450
+import sys
 
 pygame.display.init()
 
-screen = pygame.display.set_mode((winX, winY))
+#surface = pygame.image.load("CircleBlack.PNG")
+#surface = pygame.image.load("TriangleBlack.PNG")
+#surface = pygame.image.load("bholeimg.jpg")
+#surface = pygame.image.load("TerryCrews.jpg")
+#surface = pygame.image.load("flowers.jpg")
+surface = pygame.image.load(str(sys.argv[1])) # python .\blur.py .\cityscapeclear.jpg
+
+
+scrnSize = surface.get_rect().size
+print("Size:",scrnSize)
+print("Press spacebar to blur; Esc to quit.")
+screen = pygame.display.set_mode(scrnSize, 0, 32)
+winX = scrnSize[0]
+winY = scrnSize[1]
+
 
 def reset(screen):
 	screen.fill((255,255,255))
@@ -113,23 +125,10 @@ def blur(screen, rotations=1):
 				
 				avgColor = (avgColorR, avgColorG, avgColorB)
 				screen.set_at((i, j), avgColor)
-				
-		#for ii in range(winX+1):
-		#	screen.set_at((ii, winY), avgColor)
-		#for jj in range(winY+1):
-		#	screen.set_at((winX, jj), avgColor)
 
 	pygame.display.flip()
 
 done = False
-
-#surface = pygame.image.load("CircleBlack.PNG")
-surface = pygame.image.load("TriangleBlack.PNG")
-#surface = pygame.image.load("bholeimg.jpg")
-#surface = pygame.image.load("TerryCrews.jpg")
-#surface = pygame.image.load("flowers.jpg")
-surface = pygame.transform.scale(surface, (winX, winY))
-
 pixelArray = []
 
 doBlur = False
