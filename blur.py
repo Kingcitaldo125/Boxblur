@@ -1,37 +1,17 @@
-import time
 import pygame
 import random
 import sys
 
-pygame.display.init()
+from os import path
+from time import sleep
 
-#surface = pygame.image.load("CircleBlack.PNG")
-#surface = pygame.image.load("TriangleBlack.PNG")
-#surface = pygame.image.load("bholeimg.jpg")
-#surface = pygame.image.load("TerryCrews.jpg")
-#surface = pygame.image.load("flowers.jpg")
-surface = pygame.image.load(str(sys.argv[1])) # python .\blur.py .\cityscapeclear.jpg
-
-
-scrnSize = surface.get_rect().size
-print("Size:",scrnSize)
-print("Press spacebar to blur; Esc to quit.")
-screen = pygame.display.set_mode(scrnSize, 0, 32)
-winX = scrnSize[0]
-winY = scrnSize[1]
-
-
-def reset(screen):
+def reset(winX, winY, screen):
 	screen.fill((255,255,255))
 	screen.blit(surface,(0,0))
 	screen.set_at((winX, winY),(255,255,255))
 	pygame.display.flip()
 
-
-def blur(screen, rotations=1):
-	global winX
-	global winY
-
+def blur(winX, winY, screen, rotations=1):
 	for rots in range(rotations):
 		avgColor = None
 		for i in range(winX-1):
@@ -128,28 +108,43 @@ def blur(screen, rotations=1):
 
 	pygame.display.flip()
 
-done = False
-pixelArray = []
+def main():	
+	pygame.display.init()
 
-doBlur = False
+	#surface = pygame.image.load("CircleBlack.PNG")
+	#surface = pygame.image.load("TriangleBlack.PNG")
+	#surface = pygame.image.load("bholeimg.jpg")
+	#surface = pygame.image.load("TerryCrews.jpg")
+	#surface = pygame.image.load("flowers.jpg")
+	surface = pygame.image.load(str(sys.argv[1])) # python .\blur.py .\cityscapeclear.jpg
 
-reset(screen)
-while not done:
-	events = pygame.event.get()
-	for e in events:
-		if e.type == pygame.QUIT:
-			done = True
-		elif e.type == pygame.KEYDOWN:
-			if e.key == pygame.K_SPACE:
-				doBlur = True
-			if e.key == pygame.K_ESCAPE:
+	scrnSize = surface.get_rect().size
+	print("Size:",scrnSize)
+	print("Press spacebar to blur; Esc to quit.")
+	screen = pygame.display.set_mode(scrnSize, 0, 32)
+	winX = scrnSize[0]
+	winY = scrnSize[1]
+
+	done = False
+	doBlur = False
+
+	reset(winX, winY, screen)
+	while not done:
+		events = pygame.event.get()
+		for e in events:
+			if e.type == pygame.QUIT:
 				done = True
-	
-	if doBlur:
-		print("Blurring")
-		blur(screen, 6)
-		print("Done")
-		doBlur = False
-	time.sleep(0.5)
+			elif e.type == pygame.KEYDOWN:
+				if e.key == pygame.K_SPACE:
+					doBlur = True
+				if e.key == pygame.K_ESCAPE:
+					done = True
+		
+		if doBlur:
+			print("Blurring...")
+			blur(winX, winY, screen, 6)
+			print("Done")
+			doBlur = False
+		sleep(0.5)
 
-pygame.display.quit()
+	pygame.display.quit()
